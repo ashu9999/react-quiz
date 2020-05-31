@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import "./assets/style.css";
 import quizService from "./quizService";
 import  QuestionBox from "./components/QuestionBox";
+import Result from "./components/Result";
 
 class QuizBee extends Component{
   state={
     questionBank: [],
     score: 0,
-    reponses: 0
+    responses: 0
   };
   getQuestions= () => {
     quizService().then(question =>{
@@ -27,6 +28,13 @@ class QuizBee extends Component{
       responses: this.state.responses < 5 ? this.state.responses + 1 : 5
     })
   };
+  playAgain = () => {
+    this.getQuestions();
+    this.setState({
+      score: 0,
+      responses: 0
+    })
+  }
   componentDidMount(){
     this.getQuestions();
   }
@@ -46,6 +54,8 @@ class QuizBee extends Component{
             />
           )
         )}
+
+        {this.state.responses === 5 ? <Result score={this.state.score} playAgain={this.playAgain} /> : null}
       </div>
     )
   }
